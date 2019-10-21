@@ -17,6 +17,7 @@ if(WITH_FREENECT2)
     find_package(freenect2 REQUIRED)
     add_definitions(-DWITH_FREENECT2)
     list(APPEND LIBRARIES ${freenect2_LIBRARIES})
+    include_directories(${freenect2_INCLUDE_DIR})
 endif()
 
 option(WITH_FREETYPE_GL_CPP "Enable drawing of labels" OFF)

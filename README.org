@@ -1,0 +1,127 @@
+* Prepare
+** Get source code
+#+begin_example
+git clone --recursive git@github.com:yubaoliu/maskfusion.git
+cd deps
+build dependences
+#+end_example
+* Dependeces
+** COCO
+https://github.com/cocodataset/cocoapi.git
+
+#+begin_example bash
+cd coco/PythonAPI
+make
+make install
+python setup.py install
+
+before doing above steps install cython
+#+end_example
+** OpenNI2
+#+begin_example bash
+cd OpenNI2
+  make -j8
+#+end_example
+** freetype-gl-cpp
+#+begin_example bash
+cd freetype-gl-cpp
+  mkdir -p build
+  cd build
+  cmake -DBUILD_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX="`pwd`/../install" -DCMAKE_BUILD_TYPE=Release ..
+#+end_example
+** densecrf
+#+begin_example bash
+  cd densecrf
+  mkdir -p build
+  cd build
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -fPIC" \
+    ..
+  make -j8
+#+end_example
+** Pangolin
+** gSLICr
+#+begin_example bash
+  cd gSLICr
+  git pull
+  mkdir -p build
+  cd build
+  cmake \
+    -DOpenCV_DIR="${OpenCV_DIR}" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCUDA_HOST_COMPILER=/usr/bin/gcc \
+    -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_FORCE_INLINES" \
+    ..
+  make -j8
+#+end_example
+** c++ toml
+#+begin_example
+cd tom11
+git checkout v2.4.0
+#+end_example
+** CUDA 10.0
+** OpenCV 3.3.1 
+The same with ROS
+** Boost
+1.63
+** Python 
+- Version: 3.5
+- I use Conda
+
+#+begin_example bash
+$ grep -r "PYTHON_VE_PATH"
+GUI/CMakeLists.txt:set(MASKFUSION_PYTHON_VE_PATH "" CACHE STRING "Python virtual environment to use")
+Binary file build/GUI/__pycache__/MaskRCNN.cpython-35.pyc matches
+build/GUI/MaskRCNN.py:PYTHON_VE_PATH = ""
+build/GUI/MaskRCNN.py:if PYTHON_VE_PATH != "":
+build/GUI/MaskRCNN.py:  ve_path = os.path.join(PYTHON_VE_PATH, 'bin', 'activate_this.py')
+build/CMakeCache.txt:MASKFUSION_PYTHON_VE_PATH:STRING=
+Core/Segmentation/MaskRCNN/MaskRCNN.py.in:PYTHON_VE_PATH = "@MASKFUSION_PYTHON_VE_PATH@"
+Core/Segmentation/MaskRCNN/MaskRCNN.py.in:if PYTHON_VE_PATH != "":
+Core/Segmentation/MaskRCNN/MaskRCNN.py.in:  ve_path = os.path.join(PYTHON_VE_PATH, 'bin', 'activate_this.py')
+build.sh:  -DMASKFUSION_PYTHON_VE_PATH="$(pwd)/../python-environment" \
+README-org.md:The following CMake options are mandatory: `PYTHON_VE_PATH`, `MASKFUSION_MASK_RCNN_DIR` and it is recommended to set `MASKFUSION_GPUS_MASKRCNN` as well.
+README-org.md:* `PYTHON_VE_PATH`: Path to (the root of) virtual python environment, used for tensorflow
+README-org.md:* Check value of CMake option `MASKFUSION_PYTHON_VE_PATH`
+README-org.md:* Check variables `PYTHON_VE_PATH` and `MASK_RCNN_DIR` in `MaskRCNN.py` in your build directory
+README.org:  -DMASKFUSION_PYTHON_VE_PATH="$(pwd)/../python-environment" \
+#+end_example
+* Compile
+** Download coco weight
+#+begin_example bash
+cd Mask_RCNN
+  mkdir -p data
+  cd data
+  wget --no-clobber https://github.com/matterport/Mask_RCNN/releases/download/v1.0/mask_rcnn_coco.h5
+#+end_example
+
+** Build Mask RCNN
+#+begin_example bash
+mkdir -p build
+cd build
+ln -s ../deps/Mask_RCNN ./ 
+cmake \
+  -DBOOST_ROOT="${BOOST_ROOT}" \
+  -DOpenCV_DIR="$(pwd)/../deps/opencv/build" \
+  -DPangolin_DIR="$(pwd)/../deps/Pangolin/build/src" \
+  -DMASKFUSION_PYTHON_VE_PATH="$(pwd)/../python-environment" \
+  -DCUDA_HOST_COMPILER=/usr/bin/gcc \
+  -DWITH_FREENECT2=ON \
+  ..
+make -j8
+#+end_example
+
+My case:
+#+begin_example
+cmake   -DWITH_FREENECT2=ON ..
+make  -j5
+#+end_example
+
+
+* RUN
+#+begin_example
+./MaskFusion -v2 -run
+#+end_example
+
+[[file:figure/demo.gif]]

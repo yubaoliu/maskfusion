@@ -1,0 +1,24 @@
+[submodule "deps/cocoapi"]
+	path = deps/cocoapi
+	url = https://github.com/cocodataset/cocoapi.git
+[submodule "deps/densecrf"]
+	path = deps/densecrf
+	url = https://github.com/martinruenz/densecrf.git
+[submodule "deps/freetype-gl-cpp"]
+	path = deps/freetype-gl-cpp
+	url = https://github.com/martinruenz/freetype-gl-cpp.git
+[submodule "deps/OpenNI2"]
+	path = deps/OpenNI2
+	url = https://github.com/occipital/OpenNI2.git
+[submodule "deps/Pangolin"]
+	path = deps/Pangolin
+	url = https://github.com/stevenlovegrove/Pangolin.git
+[submodule "deps/gSLICr"]
+	path = deps/gSLICr
+	url = https://github.com/carlren/gSLICr.git
+[submodule "deps/Mask_RCNN"]
+	path = deps/Mask_RCNN
+	url = git@github.com:yubaoliu/Mask_RCNN.git
+[submodule "deps/toml11"]
+	path = deps/toml11
+	url = https://github.com/ToruNiina/toml11.git
